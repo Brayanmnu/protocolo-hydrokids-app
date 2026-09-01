@@ -29,7 +29,8 @@ export default function ChecklistProtocolo() {
     const [items, setItems] = useState([]);
     const [error, setError] = useState(null);
     const [dialogAbierto, setDialogAbierto] = useState(false);
-    const [snackbarAbierto, setSnackbarAbierto] = useState(false);
+    const [snackbarExito, setSnackbarExito] = useState(false);
+    const [snackbarError, setSnackbarError] = useState(false);
 
     useEffect(() => {
         if (!codigo) {
@@ -83,6 +84,13 @@ export default function ChecklistProtocolo() {
     };
 
     const handleAbrirConfirmacion = () => {
+        const faltanChecks = items.some((item) => !item.completado);
+
+        if (faltanChecks) {
+            setSnackbarError(true);
+            return;
+        }
+
         setDialogAbierto(true);
     };
 
@@ -95,12 +103,16 @@ export default function ChecklistProtocolo() {
         localStorage.removeItem(storageKey);
 
         setDialogAbierto(false);
-        setSnackbarAbierto(true);
+        setSnackbarExito(true);
     };
 
-    const handleCerrarSnackbar = () => {
-        setSnackbarAbierto(false);
+    const handleCerrarSnackbarExito = () => {
+        setSnackbarExito(false);
         navigate(-1);
+    };
+
+    const handleCerrarSnackbarError = () => {
+        setSnackbarError(false);
     };
 
     return (
@@ -220,13 +232,24 @@ export default function ChecklistProtocolo() {
             </Dialog>
 
             <Snackbar
-                open={snackbarAbierto}
+                open={snackbarExito}
                 autoHideDuration={2000}
-                onClose={handleCerrarSnackbar}
+                onClose={handleCerrarSnackbarExito}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-                <Alert onClose={handleCerrarSnackbar} severity="success" sx={{ width: "100%" }}>
+                <Alert onClose={handleCerrarSnackbarExito} severity="success" sx={{ width: "100%" }}>
                     Proceso finalizado correctamente
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={snackbarError}
+                autoHideDuration={3000}
+                onClose={handleCerrarSnackbarError}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert onClose={handleCerrarSnackbarError} severity="error" sx={{ width: "100%" }}>
+                    Debes marcar todos los checks antes de terminar
                 </Alert>
             </Snackbar>
         </Box>
