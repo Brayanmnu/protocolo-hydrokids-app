@@ -151,4 +151,6 @@ class ProtocoloService {
     }
 }
 
-export default new ProtocoloService();
+const protocoloService = new ProtocoloService();
+
+export default protocoloService;
