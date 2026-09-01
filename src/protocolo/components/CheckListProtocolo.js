@@ -127,7 +127,6 @@ export default function ChecklistProtocolo() {
                 boxSizing: "border-box"
             }}
         >
-            <br />
             <Typography
                 variant="h3"
                 sx={{ fontWeight: "bold", textAlign: "center", color: "#2b5480" }}
